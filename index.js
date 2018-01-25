@@ -80,7 +80,7 @@ function runTimeout (id) {
 
 const numOrDef = (num, def) => (typeof num === 'number' ? num : def);
 
-class Socket {
+class Passage {
     constructor (uri, options) {
         this.uri = uri;
         this.options = {
@@ -140,9 +140,10 @@ class Socket {
     removeEventListener (method, callback) {
         if (this._events[method] === undefined) return;
         const index = this._events[method].indexOf(callback);
+        if (index < 0) return;
         this._events[method].splice(index, 1);
         if (this._events[method].length < 1) delete this._events[method];
     }
 }
 
-export default Socket;
+export default Passage;
