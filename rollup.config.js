@@ -2,14 +2,14 @@ import babel from 'rollup-plugin-babel';
 import minify from 'rollup-plugin-minify';
 
 export default {
-    input: 'src/passage.js',
+    input: 'src/passage-client.js',
     output: {
-        file: 'dist/passage.js',
+        file: 'dist/passage-client.js',
         format: 'iife',
         name: 'Passage'
     },
     plugins: [
         babel(),
-        minify({ iife: 'dist/passage.min.js' })
+        minify({ iife: 'dist/passage-client.min.js' })
     ]
 };
