@@ -22,21 +22,6 @@ function onError (error) {
     runEvent.call(this, 'rpc.error', error);
 }
 
-function testRpcMessage (message) {
-    if (message.jsonrpc !== '2.0') throw new Error();
-    if (message.method !== undefined) return message;
-    if (message.id === undefined) throw new Error();
-    if (message.error !== undefined) return message;
-    if (message.result !== undefined) return message;
-    throw new Error();
-}
-
-function parseData (data) {
-    var result = JSON.parse(data);
-    if (Array.isArray(result)) return result.map(testRpcMessage);
-    return [testRpcMessage(result)];
-}
-
 function runCallback (id, error, result) {
     if (id !== undefined && this._callbacks[id] !== undefined) {
         if (error) {
@@ -51,21 +36,44 @@ function runCallback (id, error, result) {
     delete this._callbacks[id];
 }
 
+var TYPE = {
+    INVALID: 'invalid',
+    RESPONSE: 'response',
+    NOTIFICATION: 'notification'
+};
+
+function messageType (message) {
+    if (typeof message !== 'object') return TYPE.INVALID;
+    if (message.jsonrpc !== '2.0') return TYPE.INVALID;
+    if (message.method !== undefined) return TYPE.NOTIFICATION;
+    if (message.id === undefined) return TYPE.INVALID;
+    if (message.error !== undefined) return TYPE.RESPONSE;
+    if (message.result !== undefined) return TYPE.RESPONSE;
+    return TYPE.INVALID;
+}
+
 function onMessage (event) {
+    runEvent.call(this, 'rpc.message', event.data);
+
     var messages;
     try {
-        messages = parseData(event.data);
+        messages = JSON.parse(event.data);
+        if (!Array.isArray(messages)) messages = [messages];
     } catch (e) {
-        console.log('Warning: Non JSON-RPC message received.');
-        console.log(event.data);
         return;
     }
 
     for (var i = 0; i < messages.length; i++) {
         var message = messages[i];
-        runEvent.call(this, 'rpc.message', message);
-        runEvent.call(this, message.method, message.params);
-        runCallback.call(this, message.id, message.error, message.result);
+        var type = messageType(message);
+        switch (type) {
+        case TYPE.NOTIFICATION:
+            runEvent.call(this, message.method, message.params);
+            break;
+        case TYPE.RESPONSE:
+            runCallback.call(this, message.id, message.error, message.result);
+            break;
+        }
     }
 }
 
@@ -150,4 +158,4 @@ Passage.prototype.removeEventListener = function (method, callback) {
     if (this._events[method].length < 1) delete this._events[method];
 };
 
-export default Passage;
+module.exports = Passage;

@@ -1,3 +1,4 @@
+import commonjs from 'rollup-plugin-commonjs';
 import minify from 'rollup-plugin-minify';
 
 export default {
@@ -8,6 +9,7 @@ export default {
         name: 'Passage'
     },
     plugins: [
+        commonjs(),
         minify({ iife: 'dist/passage-client.min.js' })
     ]
 };
