@@ -115,7 +115,8 @@ class Passage {
             return;
         }
 
-        const id = this._nextId++;
+        const id = (typeof callback === 'function' ? this._nextId++ : undefined);
+
         let message;
         try {
             message = JSON.stringify({ id, method, params, jsonrpc: '2.0' });

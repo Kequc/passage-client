@@ -176,7 +176,8 @@ var Passage = function () {
                 return;
             }
 
-            var id = this._nextId++;
+            var id = typeof callback === 'function' ? this._nextId++ : undefined;
+
             var message = void 0;
             try {
                 message = JSON.stringify({ id: id, method: method, params: params, jsonrpc: '2.0' });
