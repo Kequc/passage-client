@@ -1,6 +1,3 @@
-var Passage = (function () {
-'use strict';
-
 function runEvent (method, params) {
     if (method === undefined || this._events[method] === undefined) return;
     for (var i = 0; i < this._events.length; i++) {
@@ -153,6 +150,4 @@ Passage.prototype.removeEventListener = function (method, callback) {
     if (this._events[method].length < 1) delete this._events[method];
 };
 
-return Passage;
-
-}());
+export default Passage;
