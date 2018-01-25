@@ -2,7 +2,7 @@
   "name": "passage-client",
   "version": "0.1.0",
   "description": "Client side JSON-RPC websockets",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "build": "rollup -c",
     "test": "echo \"Error: no test specified\" && exit 1"
