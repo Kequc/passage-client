@@ -14,10 +14,10 @@ Install the package from npm.
 npm i passage-client --save
 ```
 
-Import it into your scripts.
+Import it into your client side script.
 
 ```javascript
-import Passage from 'passage-client';
+const Passage = require('passage-client');
 ```
 
 ## Installation from IIFE
@@ -45,6 +45,7 @@ const passage = new Passage('wss://example.com', options);
 passage.addEventListener('rpc.open', () => {
     console.log('connected!');
 });
+
 passage.addEventListener('myapp.newuser', (params) => {
     console.log(params);
 });
@@ -72,7 +73,7 @@ The maximum number of tries when attempting to reconnect.
 
 #### addEventListener (method: string, callback: (params) => void) => void
 
-When the server sends a notification to your application, you may choose to intercept and use the data. There are a few included events the library will provide for you to use.
+When the server sends a notification to your application, you may choose to set an event for that data using its' method name. There are a few included events the library provides.
 
 | method | description |
 | - | - |
@@ -93,6 +94,6 @@ Closes the connection.
 
 This will close the connection, then reconnect.
 
-#### send (method: string, params: Object, [callback: (error: Error, result: any) => void, timeout: number]) => void
+#### send (method: string, params: any, [callback: (error: Error, result: any) => void, timeout: number]) => void
 
-Send a request to the server. If a callback is provided, then the server will respond once it has finished processing the request. If a timeout is provided it will override the default request timeout.
+Send a request to the server. If a callback is provided, then the server will respond once it has finished processing the request. It may recieve a error or a result. If a timeout is provided it will override the default request timeout.

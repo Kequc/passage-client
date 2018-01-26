@@ -1,7 +1,4 @@
-var Passage = (function () {
-'use strict';
-
-var passageClient = function (WebSocket) {
+module.exports = function (WebSocket) {
 
     function runEvent (method, params) {
         if (method === undefined || this._events[method] === undefined) return;
@@ -178,9 +175,3 @@ var passageClient = function (WebSocket) {
     return Passage;
     
 };
-
-var passageClient$2 = passageClient(WebSocket); // eslint-disable-line no-undef
-
-return passageClient$2;
-
-}());
