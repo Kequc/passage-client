@@ -96,4 +96,4 @@ This will close the connection, then reconnect.
 
 #### send (method: string, params: any, [callback: (error: Error, result: any) => void, timeout: number]) => void
 
-Send a request to the server. If a callback is provided, then the server will respond once it has finished processing the request. It may recieve a error or a result. If a timeout is provided it will override the default request timeout.
+Send a request to the server. If a callback is provided, then the server will respond once it has finished processing the request. It may return an error or a result once completed but not both. If a timeout is provided it will override the default request timeout from options.
