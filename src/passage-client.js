@@ -176,6 +176,11 @@ module.exports = function (WebSocket) {
     };
 
     Passage.prototype.send = function (method, params, callback, timeout) {
+        if (typeof params === 'function') {
+            timeout = callback;
+            callback = params;
+            params = undefined;
+        }
         const data = {
             method: method,
             params: params,

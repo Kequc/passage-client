@@ -31,6 +31,16 @@ describe('messages', () => {
             });
         });
         it('should send a notification', done => {
+            server.addEventListener('message', data => {
+                const message = JSON.parse(data);
+                expect(message).to.eql({ method, jsonrpc: '2.0' });
+                done();
+            });
+            passage.addEventListener('rpc.open', () => {
+                passage.send(method);
+            });
+        });
+        it('should send a notification with params', done => {
             const params = { some: 'data' };
             server.addEventListener('message', data => {
                 const message = JSON.parse(data);
@@ -77,16 +87,16 @@ describe('messages', () => {
 
     describe('callbacks', () => {
         it('should receive a response', done => {
-            const params = { some: 'data' };
+            const expectedResult = { some: 'data' };
             server.addEventListener('message', data => {
                 const message = JSON.parse(data);
                 expect(message).to.eql({ id: 1, method, jsonrpc: '2.0' });
-                server.send(JSON.stringify({ id: 1, result: params, jsonrpc: '2.0' }));
+                server.send(JSON.stringify({ id: 1, result: expectedResult, jsonrpc: '2.0' }));
             });
             passage.addEventListener('rpc.open', () => {
-                passage.send(method, undefined, (error, result) => {
+                passage.send(method, (error, result) => {
                     expect(error).to.be(undefined);
-                    expect(result).to.eql(params);
+                    expect(result).to.eql(expectedResult);
                     done();
                 });
             });
@@ -100,9 +110,9 @@ describe('messages', () => {
                 id++;
             });
             passage.addEventListener('rpc.open', () => {
-                passage.send(method, undefined, () => {
-                    passage.send(method, undefined, () => {
-                        passage.send(method, undefined, () => {
+                passage.send(method, () => {
+                    passage.send(method, () => {
+                        passage.send(method, () => {
                             done();
                         });
                     });
@@ -117,7 +127,7 @@ describe('messages', () => {
                 server.send(JSON.stringify({ id: 1, error, jsonrpc: '2.0' }));
             });
             passage.addEventListener('rpc.open', () => {
-                passage.send(method, undefined, (error, result) => {
+                passage.send(method, (error, result) => {
                     expect(error).to.be.an(Error);
                     expect(error.message).to.equal(error.message);
                     expect(error.code).to.equal(error.code);
@@ -129,7 +139,7 @@ describe('messages', () => {
         });
         it('should timeout on no response', done => {
             passage.addEventListener('rpc.open', () => {
-                passage.send(method, undefined, (error, result) => {
+                passage.send(method, (error, result) => {
                     expect(error).to.be.an(Error);
                     expect(error.message).to.equal('Timeout');
                     expect(error.code).to.equal(408);
