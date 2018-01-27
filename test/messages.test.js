@@ -41,6 +41,38 @@ describe('messages', () => {
                 passage.send(method, params);
             });
         });
+        it('should send multiple notifications', done => {
+            const params1 = { some: 'data' };
+            const params2 = { more: 'data' };
+            server.addEventListener('message', data => {
+                const message = JSON.parse(data);
+                expect(message).to.eql([
+                    { method, params: params1, jsonrpc: '2.0' },
+                    { method, params: params2, jsonrpc: '2.0' }
+                ]);
+                done();
+            });
+            passage.addEventListener('rpc.open', () => {
+                passage.sendAll([
+                    { method, params: params1 },
+                    { method, params: params2 },
+                ]);
+            });
+        });
+        it('should recover from invalid input', done => {
+            const params = { some: 'data' };
+            server.addEventListener('message', data => {
+                const message = JSON.parse(data);
+                expect(message).to.eql({ method, params, jsonrpc: '2.0' });
+                done();
+            });
+            passage.addEventListener('rpc.open', () => {
+                passage.sendAll([
+                    () => {},
+                    { method, params },
+                ]);
+            });
+        });
     });
 
     describe('callbacks', () => {
@@ -105,6 +137,18 @@ describe('messages', () => {
                     expect(result).to.be(undefined);
                     done();
                 }, 0); // Timeout set to 0 for faster test
+            });
+        });
+        it('should run callbacks on invalid input', done => {
+            const callback = error => {
+                expect(error).to.be.an(Error);
+                done();
+            };
+            passage.addEventListener('rpc.open', () => {
+                passage.sendAll([
+                    { method: () => {}, callback },
+                    { method },
+                ]);
             });
         });
     });

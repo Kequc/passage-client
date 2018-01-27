@@ -1,15 +1,15 @@
 import commonjs from 'rollup-plugin-commonjs';
-import minify from 'rollup-plugin-minify';
+import uglify from 'rollup-plugin-uglify';
 
 export default {
     input: 'index.js',
     output: {
-        file: 'dist/passage-client.js',
+        file: 'dist/passage-client.min.js',
         format: 'iife',
         name: 'Passage'
     },
     plugins: [
         commonjs(),
-        minify({ iife: 'dist/passage-client.min.js' })
+        uglify()
     ]
 };

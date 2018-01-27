@@ -2,7 +2,7 @@
 
 #### Client side JSON-RPC 2.0 websockets library
 
-This is websocket subprotocol implementation for remote procedure calls and supports server responses. Useful when used with a server that supports JSON-RPC.
+This is a websocket subprotocol implementation for remote procedure calls and supports server responses. Useful when used with a server that supports JSON-RPC.
 
 http://www.jsonrpc.org/specification
 
@@ -10,19 +10,19 @@ http://www.jsonrpc.org/specification
 
 Install the package from npm.
 
-```
+```text
 npm i passage-client --save
 ```
 
 Import it into your client side script.
 
 ```javascript
-const Passage = require('passage-client');
+import Passage from 'passage-client';
 ```
 
 ## Installation from IIFE
 
-Download and include the library on your page.
+Download and include the library onto your page.
 
 ```html
 <script src="/javascripts/passage-client.min.js"></script>
@@ -49,6 +49,10 @@ passage.addEventListener('rpc.open', () => {
 passage.addEventListener('myapp.newuser', (params) => {
     console.log(params);
 });
+
+passage.send('myapp.hello', { user: 'mike' }, (result) => {
+    console.log(result);
+});
 ```
 
 ## Options
@@ -71,7 +75,7 @@ The maximum number of tries when attempting to reconnect.
 
 ## Instance
 
-#### addEventListener (method: string, callback: (params) => void) => void
+#### addEventListener (method: string, callback: (params: any) => void) => void
 
 When the server sends a notification to your application, you may choose to set an event for that data using its' method name. There are a few included events the library provides.
 
@@ -86,6 +90,10 @@ When the server sends a notification to your application, you may choose to set 
 
 The notification you would like to stop listening to.
 
+#### removeEventListeners (method: string) => void
+
+Remove all event listeners.
+
 #### close () => void
 
 Closes the connection.
@@ -94,6 +102,10 @@ Closes the connection.
 
 This will close the connection, then reconnect.
 
-#### send (method: string, params: any, [callback: (error: Error, result: any) => void, timeout: number]) => void
+#### send (method: string, params: any, callback?: (error: Error, result?: any) => void, timeout?: number]) => void
 
 Send a request to the server. If a callback is provided, then the server will respond once it has finished processing the request. It may return an error or a result once completed but not both. If a timeout is provided it will override the default request timeout from options.
+
+#### sendAll (arr: { method: string, params: any, callback?: Function }[], timeout?: number)
+
+Sends a number of requests at once.

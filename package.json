@@ -1,6 +1,6 @@
 {
   "name": "passage-client",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Client side JSON-RPC websockets",
   "main": "index.js",
   "scripts": {
@@ -29,7 +29,7 @@
     "mock-socket": "^7.1.0",
     "rollup": "^0.55.0",
     "rollup-plugin-commonjs": "^8.2.6",
-    "rollup-plugin-minify": "^1.0.3"
+    "rollup-plugin-uglify": "^3.0.0"
   },
   "dependencies": {}
 }

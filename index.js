@@ -1,1 +1,2 @@
-module.exports = require('./src/passage-client')(WebSocket); // eslint-disable-line no-undef
+import passageClient from './src/passage-client';
+export default passageClient(WebSocket); // eslint-disable-line no-undef

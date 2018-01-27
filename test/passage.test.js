@@ -53,6 +53,13 @@ describe('passage', () => {
             passage.removeEventListener(name, handler2);
             expect(passage._events[name]).to.be(undefined);
         });
+        it('should remove all event listeners', () => {
+            const name = 'my.event';
+            passage.addEventListener(name, () => {});
+            passage.addEventListener(name, () => {});
+            passage.removeEventListeners(name);
+            expect(passage._events[name]).to.be(undefined);
+        });
         it('should trigger rpc.open on connection', done => {
             passage.addEventListener('rpc.open', done);
         });
