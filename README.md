@@ -50,7 +50,7 @@ passage.addEventListener('myapp.newuser', (params) => {
     console.log(params);
 });
 
-passage.send('myapp.hello', { user: 'mike' }, (result) => {
+passage.send('myapp.hello', { user: 'mike' }, (error, result) => {
     console.log(result);
 });
 ```
