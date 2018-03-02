@@ -1,3 +1,8 @@
+**Notice:** Library deprecated use sister library "passage-rpc".
+
+* https://www.npmjs.com/package/passage-rpc
+* https://github.com/Kequc/passage-rpc
+
 # Passage Client
 
 #### Client side JSON-RPC 2.0 websockets library

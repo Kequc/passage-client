@@ -1,6 +1,6 @@
 {
   "name": "passage-client",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Client side JSON-RPC websockets",
   "main": "index.js",
   "scripts": {
